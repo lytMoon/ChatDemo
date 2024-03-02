@@ -7,6 +7,11 @@ android {
     namespace = "com.lytmoon.chatdemo"
     compileSdk = 34
 
+
+    viewBinding {
+        enable = true
+    }
+
     defaultConfig {
         applicationId = "com.lytmoon.chatdemo"
         minSdk = 24
@@ -36,6 +41,17 @@ android {
 }
 
 dependencies {
+
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.6.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.6.1")
+//    implementation ("com.github.plexpt:chatgpt:4.1.2")
+    implementation("io.reactivex.rxjava3:rxjava:3.0.13")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+
+
+
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
