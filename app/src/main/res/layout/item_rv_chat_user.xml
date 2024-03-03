@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+        android:maxWidth="230dp"
+        android:orientation="horizontal"
+        app:cardBackgroundColor="#3577F1"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        tools:ignore="RtlSymmetry">
+
+        <TextView
+            android:id="@+id/chat_user_ask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:maxWidth="220dp"
+            android:textColor="@color/white"
+            android:textIsSelectable="true"
+            android:textSize="20sp" />
+
+    </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>

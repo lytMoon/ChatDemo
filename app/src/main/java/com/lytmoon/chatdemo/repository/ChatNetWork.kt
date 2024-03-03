@@ -1,45 +1,41 @@
 package com.lytmoon.chatdemo.repository
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import com.lytmoon.chatdemo.api.ChatApiService
 import com.lytmoon.chatdemo.bean.ChatReplyData
+import com.lytmoon.chatdemo.bean.ChatRequest
+import com.lytmoon.chatdemo.bean.Message
+import com.lytmoon.chatdemo.bean.MessageSend
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ChatNetWork {
 
+    private val url = "https://oa.api2d.net/"
 
-    fun getReplyData(ques: String): List<ChatReplyData>? {
-
-        val list = mutableListOf<ChatReplyData>()
-        for (it in 0 until 10) {
-           list.add(it,ChatReplyData(it.toString()))
-        }
-        Log.d("LogTest","测试数据:${list}")
-        return list
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(url)
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .build()
 
 
-//        val proxy = Proxys.http("127.0.0.1", 7890)
-//        val chatGPT = ChatGPT.builder()
-//            .apiKey(ApiKey.str)
-//            .proxy(proxy)
-//            .timeout(900)
-//            .apiHost("https://api.openai.com/") //反向代理地址
-//            .build()
-//            .init()
-//
-//        val system = Message.ofSystem("你是由lytMoon开发的chatGPT聊天语言模型")
-//        val message: Message = Message.of(ques)
-//
-//        val chatCompletion = ChatCompletion.builder()
-//            .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-//            .maxTokens(4000)
-//            .messages(listOf(system, message))
-//            .temperature(0.9)
-//            .build()
-//        val response = chatGPT.chatCompletion(chatCompletion)
-//        Log.d("LogTest", "测试数据:${response}")
-//        val res: Message = response.choices[0].message
-//        return res.content
+    private val chatApi = retrofit.create(ChatApiService::class.java)
+
+
+    fun getReplyData(ques: String): Observable<ChatReplyData> {
+
+        val message = MessageSend("user", ques)
+        val request = ChatRequest("gpt-3.5-turbo", listOf(message), false)
+
+        return chatApi.getChatCompletion(request)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 
     }
+
 }
