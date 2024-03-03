@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
             if (mEdit.query.isNotEmpty()) {
                 mViewModel.addUserQuest(mEdit.query.toString())
+                mViewModel.receiveChatReply(mEdit.query.toString())
                 mEdit.clearFocus()
                 mEdit.setQuery("", false)
             } else {
@@ -101,7 +102,6 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.replyData.observe(this@MainActivity) {
             mReplyAdapter.submitList(it)
-            Log.d("4484884", "测试数据:${it}")
         }
         mRv.layoutManager = LinearLayoutManager(this)
         mRv.adapter = mReplyAdapter
