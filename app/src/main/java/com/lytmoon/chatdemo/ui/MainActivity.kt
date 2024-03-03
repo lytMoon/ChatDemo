@@ -2,11 +2,13 @@ package com.lytmoon.chatdemo.ui
 
 import ChatAdapter
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lytmoon.chatdemo.R
+import com.lytmoon.chatdemo.helper.SaveUtil
 import com.lytmoon.chatdemo.viewmodel.ChatViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRv: RecyclerView
     private lateinit var mEdit: androidx.appcompat.widget.SearchView
     private lateinit var mSend: ImageView
+    private lateinit var mClear: ImageView
+    private lateinit var mBottomLayout: FrameLayout
 
 
     private val mViewModel by lazy {
@@ -32,17 +37,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        iniBeforeData()
         iniView()
         iniTrans()
-        iniClick()
+        iniListener()
         iniReply()
 
 
     }
 
-    private fun iniClick() {
-        mSend.setOnClickListener {
+    private fun iniBeforeData() {
+        mViewModel.readFromLocal(this@MainActivity)
+    }
 
+    private fun iniListener() {
+        mSend.setOnClickListener {
             if (mEdit.query.isNotEmpty()) {
                 mViewModel.addUserQuest(mEdit.query.toString())
                 mViewModel.receiveChatReply(mEdit.query.toString())
@@ -52,6 +61,25 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "请输入问题", Toast.LENGTH_SHORT).show()
             }
         }
+
+        val rootView = findViewById<View>(android.R.id.content)
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            val keyboardHeight = screenHeight - rect.bottom
+            val isKeyboardVisible = keyboardHeight > screenHeight * 0.15
+            if (isKeyboardVisible) {
+                mBottomLayout.translationY = -keyboardHeight.toFloat()
+            } else {
+                mBottomLayout.translationY = 0f
+            }
+        }
+        mClear.setOnClickListener {
+            mViewModel.clearChatData()
+        }
+
+
     }
 
     private fun iniView() {
@@ -63,8 +91,8 @@ class MainActivity : AppCompatActivity() {
                 (this.layoutParams as ViewGroup.MarginLayoutParams).apply {
                     setMargins(28, 0, 0, 0)
                 }
+                background = null
             }
-            //把SearchView输入文字后自带的删除图标设置为null
             findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn).apply {
                 setImageDrawable(null)
             }
@@ -77,6 +105,8 @@ class MainActivity : AppCompatActivity() {
                         mViewModel.receiveChatReply(query)
                         mEdit.clearFocus()
                         mEdit.setQuery("", false)
+                    } else {
+                        Toast.makeText(this@MainActivity, "问题不能为空", Toast.LENGTH_SHORT).show()
                     }
 
                     return false
@@ -88,6 +118,9 @@ class MainActivity : AppCompatActivity() {
             })
             setBackgroundColor(Color.TRANSPARENT)
         }
+
+        mBottomLayout = findViewById(R.id.fl_bottom)
+        mClear = findViewById(R.id.iv_clear)
 
 
     }
@@ -102,6 +135,7 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.replyData.observe(this@MainActivity) {
             mReplyAdapter.submitList(it)
+            SaveUtil.saveChatReplyList(this, it)
         }
         mRv.layoutManager = LinearLayoutManager(this)
         mRv.adapter = mReplyAdapter

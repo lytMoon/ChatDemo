@@ -11,16 +11,17 @@
         android:id="@+id/rv_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
         android:clipToPadding="false"
-        android:paddingBottom="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        android:paddingBottom="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <FrameLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/fl_bottom"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"
@@ -51,7 +52,8 @@
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/sv_user_input"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="42dp"
+                android:iconifiedByDefault="false"
                 app:iconifiedByDefault="false"
                 app:searchIcon="@null" />
 
@@ -60,7 +62,7 @@
         <ImageView
             android:id="@+id/iv_user_send"
             android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_height="37dp"
             android:layout_gravity="end"
             android:layout_marginEnd="10dp"
             android:src="@drawable/iv_user_send" />
