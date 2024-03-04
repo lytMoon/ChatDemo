@@ -49,7 +49,7 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxjava:3.0.13")
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
 
-    implementation("com.squareup.leakcanary:leakcanary-android:2.10")
+//    implementation("com.squareup.leakcanary:leakcanary-android:2.10")
 
 
     implementation("androidx.core:core-ktx:1.12.0")

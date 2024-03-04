@@ -18,15 +18,11 @@ class ChatViewModel : ViewModel() {
         get() = _replyList
 
 
-    init {
-        addFirstViewHolder()
-    }
-
     private fun addFirstViewHolder(): List<ChatReplyData> {
-        val firstHolder =
+        val firstHolderList =
             ChatReplyData(null, null, null, null, null, null, null, "firstViewHolder", null)
-        _replyList.postValue(listOf(firstHolder))
-        return listOf(firstHolder)
+        _replyList.postValue(listOf(firstHolderList))
+        return listOf(firstHolderList)
     }
 
     fun receiveChatReply(ques: String) {

@@ -7,6 +7,9 @@ import com.lytmoon.chatdemo.bean.ChatReplyData
 
 object SaveUtil {
     private val gson = Gson()
+    private val firstHolderList =
+        ChatReplyData(null, null, null, null, null, null, null, "firstViewHolder", null)
+
     fun saveChatReplyList(context: Context, chatReplyList: List<ChatReplyData>) {
         val sharedPreferences =
             context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
@@ -22,6 +25,6 @@ object SaveUtil {
             context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val json = sharedPreferences.getString("chatReplyList", null)
         val type = object : TypeToken<List<ChatReplyData>>() {}.type
-        return gson.fromJson(json, type) ?: emptyList()
+        return gson.fromJson(json, type) ?: listOf(firstHolderList)
     }
 }
