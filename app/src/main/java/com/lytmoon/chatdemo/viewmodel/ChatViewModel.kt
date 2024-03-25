@@ -27,29 +27,24 @@ class ChatViewModel : ViewModel() {
 
     fun receiveChatReply(ques: String) {
 
-        getReplyData(ques).subscribe(object : Observer<ChatReplyData> {
-            override fun onSubscribe(d: Disposable) {
-            }
-
-            override fun onError(e: Throwable) {
-                Log.d("receiveChatReply", "测试数据:${e}")
-            }
-
-            override fun onComplete() {
-            }
-
-            override fun onNext(t: ChatReplyData) {
-
-                val list = listOf(t)
-
-                for (it in list) {
-                    it.viewHolder = "botViewHolder"
+        getReplyData(ques).map {
+                it.viewHolder = "botViewHolder"
+                it
+            }.subscribe(object : Observer<ChatReplyData> {
+                override fun onSubscribe(d: Disposable) {
                 }
-                _replyList.value = _replyList.value?.plus(list)
 
-            }
+                override fun onError(e: Throwable) {
+                    Log.d("receiveChatReply", "测试数据:${e}")
+                }
 
-        })
+                override fun onComplete() {
+                }
+
+                override fun onNext(t: ChatReplyData) {
+                    _replyList.value = _replyList.value?.plus(listOf(t))
+                }
+            })
     }
 
 

@@ -135,6 +135,7 @@ class MainActivity : AppCompatActivity() {
         mViewModel.replyData.observe(this@MainActivity) {
             mReplyAdapter.submitList(it)
             SaveUtil.saveChatReplyList(this, it)
+            mRv.scrollToPosition(it.size-1)
         }
         mRv.layoutManager = LinearLayoutManager(this)
         mRv.adapter = mReplyAdapter
