@@ -3,7 +3,6 @@ package com.lytmoon.chatdemo.repository
 import com.lytmoon.chatdemo.api.ChatApiService
 import com.lytmoon.chatdemo.bean.ChatReplyData
 import com.lytmoon.chatdemo.bean.ChatRequest
-import com.lytmoon.chatdemo.bean.Message
 import com.lytmoon.chatdemo.bean.MessageSend
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -15,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ChatNetWork {
 
-    private val url = "https://oa.api2d.net/"
+    private const val url = "https://oa.api2d.net/"
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(url)
@@ -37,5 +36,4 @@ object ChatNetWork {
             .observeOn(AndroidSchedulers.mainThread())
 
     }
-
 }

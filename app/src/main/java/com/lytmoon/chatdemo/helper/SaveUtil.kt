@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.lytmoon.chatdemo.bean.ChatReplyData
 
 object SaveUtil {
+
     private val gson = Gson()
     private val firstHolderList =
         ChatReplyData(null, null, null, null, null, null, null, "firstViewHolder", null)

@@ -10,6 +10,12 @@ import com.lytmoon.chatdemo.helper.SaveUtil
 import com.lytmoon.chatdemo.repository.ChatNetWork.getReplyData
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 
 class ChatViewModel : ViewModel() {
 
@@ -18,33 +24,34 @@ class ChatViewModel : ViewModel() {
         get() = _replyList
 
 
+    fun receiveChatReply(ques: String) {
+
+        getReplyData(ques).map {
+            it.viewHolder = "botViewHolder"
+            it
+        }.subscribe(object : Observer<ChatReplyData> {
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onError(e: Throwable) {
+                e.printStackTrace()
+            }
+
+            override fun onComplete() {
+            }
+
+            override fun onNext(t: ChatReplyData) {
+                _replyList.value = _replyList.value?.plus(t)
+            }
+        })
+    }
+
+
     private fun addFirstViewHolder(): List<ChatReplyData> {
         val firstHolderList =
             ChatReplyData(null, null, null, null, null, null, null, "firstViewHolder", null)
         _replyList.postValue(listOf(firstHolderList))
         return listOf(firstHolderList)
-    }
-
-    fun receiveChatReply(ques: String) {
-
-        getReplyData(ques).map {
-                it.viewHolder = "botViewHolder"
-                it
-            }.subscribe(object : Observer<ChatReplyData> {
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.d("receiveChatReply", "测试数据:${e}")
-                }
-
-                override fun onComplete() {
-                }
-
-                override fun onNext(t: ChatReplyData) {
-                    _replyList.value = _replyList.value?.plus(listOf(t))
-                }
-            })
     }
 
 

@@ -45,41 +45,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun iniBeforeData() {
-        mViewModel.readFromLocal(this@MainActivity)
-    }
-
-    private fun iniListener() {
-        mSend.setOnClickListener {
-            if (mEdit.query.isNotEmpty()) {
-                mViewModel.addUserQuest(mEdit.query.toString())
-                mViewModel.receiveChatReply(mEdit.query.toString())
-                mEdit.clearFocus()
-                mEdit.setQuery("", false)
-            } else {
-                Toast.makeText(this, "请输入问题", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val rootView = findViewById<View>(android.R.id.content)
-        rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            rootView.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = rootView.height
-            val keyboardHeight = screenHeight - rect.bottom
-            val isKeyboardVisible = keyboardHeight > screenHeight * 0.15
-            if (isKeyboardVisible) {
-                mBottomLayout.translationY = -keyboardHeight.toFloat()
-            } else {
-                mBottomLayout.translationY = 0f
-            }
-        }
-        mClear.setOnClickListener {
-            mViewModel.clearChatData()
-        }
-
-
-    }
 
     private fun iniView() {
         mRv = findViewById(R.id.rv_chat)
@@ -117,11 +82,42 @@ class MainActivity : AppCompatActivity() {
             })
             setBackgroundColor(Color.TRANSPARENT)
         }
-
         mBottomLayout = findViewById(R.id.fl_bottom)
         mClear = findViewById(R.id.iv_clear)
+    }
 
+    private fun iniBeforeData() {
+        mViewModel.readFromLocal(this@MainActivity)
+    }
 
+    private fun iniListener() {
+        mSend.setOnClickListener {
+            if (mEdit.query.isNotEmpty()) {
+                mViewModel.addUserQuest(mEdit.query.toString())
+                mViewModel.receiveChatReply(mEdit.query.toString())
+                mEdit.clearFocus()
+                mEdit.setQuery("", false)
+            } else {
+                Toast.makeText(this, "请输入问题", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val rootView = findViewById<View>(android.R.id.content)
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            val keyboardHeight = screenHeight - rect.bottom
+            val isKeyboardVisible = keyboardHeight > screenHeight * 0.15
+            if (isKeyboardVisible) {
+                mBottomLayout.translationY = -keyboardHeight.toFloat()
+            } else {
+                mBottomLayout.translationY = 0f
+            }
+        }
+        mClear.setOnClickListener {
+            mViewModel.clearChatData()
+        }
     }
 
     private fun iniTrans() {
@@ -135,11 +131,10 @@ class MainActivity : AppCompatActivity() {
         mViewModel.replyData.observe(this@MainActivity) {
             mReplyAdapter.submitList(it)
             SaveUtil.saveChatReplyList(this, it)
-            mRv.scrollToPosition(it.size-1)
+            mRv.scrollToPosition(it.size - 1)
         }
         mRv.layoutManager = LinearLayoutManager(this)
         mRv.adapter = mReplyAdapter
-
 
     }
 }
